@@ -6,7 +6,13 @@ nixpkgs.haskellPackages.developPackage {
   modifier = drv:
     nixpkgs.haskell.lib.addBuildTools drv (with nixpkgs.haskellPackages;
       [ cabal-install
+        extra
         ghcid
+        http-client
+        http-download
+        haskell-language-server
+        polysemy
+        rio
       ]);
 }
 

@@ -1,10 +1,10 @@
 --------------------------------------------------------------------------------
-{-# LANGUAGE OverloadedStrings #-}
 import Control.Monad (filterM)
 import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 import Data.Monoid (mappend)
 import Hakyll
+import RIO
 
 import Hakyll.Netogallo
 --------------------------------------------------------------------------------
