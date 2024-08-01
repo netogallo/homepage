@@ -6,11 +6,12 @@ module Hakyll.Polysemy.ExternalResourceCache (
 ) where
 
 import Control.Monad.Extra (loopM)
-import Control.Monad.IO.Class (MonadIO)
+import Control.Monad.IO.Class (MonadIO(..))
 import Data.Hashable (Hashable(..))
 import Data.Kind (Type)
 import qualified Data.List as List
 import Data.Text (Text)
+import qualified Data.Text.IO as Text.IO
 import qualified Data.Text as Text
 import Hakyll.Core.Compiler (cached, Compiler, unsafeCompiler)
 import Hakyll.Core.Identifier (fromFilePath, Identifier)
@@ -133,8 +134,9 @@ createResource res = do
     action = withTmpFolder @IO $ \tmp -> runSimplePrettyApp 80 mempty $ do
       req <- parseRequest url
       path <- parseRelFile $ asFileName res
-      result <- download req (tmp P.</> path)
-      pure undefined
+      let outFile = tmp P.</> path
+      result <- download req outFile
+      liftIO $ Text.IO.readFile (P.toFilePath outFile)
 
 runTextResourceHandler ::
   Text ->

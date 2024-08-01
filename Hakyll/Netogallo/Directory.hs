@@ -43,7 +43,7 @@ getDirectoryContents ::
   Sem r [Path Abs Dir]
 getDirectoryContents path = do
   contents <- embed (RD.getDirectoryContents (toFilePath path) :: m [FilePath])
-  mapM parseAbsDir contents
+  mapM (fmap (path </>) . parseRelDir) [d | d <- contents, d `notElem` [".", ".."]]
 
 createDirectoryIfMissing ::
   forall m r .

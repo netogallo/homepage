@@ -1,5 +1,6 @@
 ---
-project: Telescope Histon
+type: project
+name: Telescope Histon
 repository:
     github:
         owner: netogallo

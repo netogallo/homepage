@@ -35,7 +35,10 @@ main = hakyll $ do
 
     match "projects/*/entries/*.md" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
+        compile $
+            getResourceBody
+            >>= applyAsTemplate codeIncludeField
+            >>= pandocCompilerForCodeInsertion
             >>= loadAndApplyTemplate "templates/entry.html" entryCtx
             >>= loadAndApplyTemplate "templates/default.html" entryCtx
             >>= relativizeUrls

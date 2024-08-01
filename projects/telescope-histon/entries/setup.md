@@ -18,5 +18,4 @@ A directory often used to install Neovim plugins is `~/.config/nvim/lua/`, so yo
 If you don't want to mess with your Neovim configuration and keep things separate, this project supplies a shell.nix file which can be used with [Nix](https://nixos.org/) to run this plugin. If you are not familiar with Nix, I strongly recommend you to check it out. To summarize, Nix is a package manager that, unlike traditional package managers, allows one to have multiple versions of the same package and customize each version down to the build flags used by the compiler to build the package. It runs on many Unix-like systems, including Linux and MacOS, so you should be able to integrate it into your development workflow. Once you have nix installed, you can simply run `nix-shell --run nvim` and it will launch Neovim with telescope and this plugin installed without interfering with your current Neovim configuration.
 
 Lets look at the shell.nix file to understand how this is achieved:
-
-
+$code-include("shell.nix", "3", "9")$

@@ -1,6 +1,5 @@
 module Hakyll.Netogallo (
-  entryCtx,
-  projectCtx
+  module Hakyll.Netogallo
 ) where
 
 import Control.Lens ((.~), _1, _2)
@@ -13,6 +12,8 @@ import qualified Data.Text as Text
 import Hakyll (Context, defaultContext, Item, fromFilePath, itemIdentifier, toFilePath)
 import qualified Hakyll
 import qualified Hakyll.Core.Store as Store
+import Hakyll.Core.Compiler (Compiler)
+import Hakyll.Web.Pandoc (defaultHakyllReaderOptions, defaultHakyllWriterOptions, readPandocWith, writePandocWith)
 import Network.HTTP.Simple (parseRequest)
 import Network.HTTP.Download (download)
 import Path.Posix ((</>), Abs, Dir, File, parent, parseAbsDir, Path, Rel, dirname)
@@ -105,13 +106,13 @@ entryMetadata item = do
     Left error -> throwError "entryMetadata" error
 
 repoUrlCtx :: Context String
-repoUrlCtx = field "repositoryUrl" $ (repoUrl . projectRepository <$>) . projectMetadata
+repoUrlCtx = field "repository-url" $ (repoUrl . projectRepository <$>) . projectMetadata
 
 projectCtx :: Context String
-projectCtx = defaultContext
+projectCtx = codeIncludeField <> repoUrlCtx <> defaultContext
 
 entryCtx :: Context String
-entryCtx = repoUrlCtx <> defaultContext
+entryCtx = codeIncludeField <> repoUrlCtx <> defaultContext
 
 codeIncludeField :: Context String
 codeIncludeField = functionField "code-include" compiler
@@ -127,3 +128,9 @@ codeIncludeField = functionField "code-include" compiler
           result <- fromRepository repo path (Just $ entryCommit entryMeta) (WithinLines iStart iEnd)
           note (asError "codeIncludeField" "Resource not found") (Text.unpack <$> result)
         args -> throwError "codeIncludeField" $ "Invalid arguments: " ++ show args
+
+pandocCompilerForCodeInsertion :: Item String -> Compiler (Item String)
+pandocCompilerForCodeInsertion content = do
+  itemPandoc <- readPandocWith defaultHakyllReaderOptions content
+  itemPandoc' <- traverse (return . id) itemPandoc
+  return $ writePandocWith defaultHakyllWriterOptions itemPandoc'
