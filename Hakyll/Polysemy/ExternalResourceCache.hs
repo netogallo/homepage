@@ -1,5 +1,8 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FunctionalDependencies #-}
 module Hakyll.Polysemy.ExternalResourceCache (
+  module Hakyll.Polysemy.ExternalResourceCache
 ) where
 
 import Control.Monad.Extra (loopM)
@@ -25,6 +28,7 @@ import RIO.PrettyPrint.Simple (runSimplePrettyApp)
 import System.FilePath ((</>))
 import Type.Errors (ErrorMessage(..), TypeError)
 
+import qualified Hakyll.Repository as Repository
 import Hakyll.Netogallo.Directory (withTmpFolder)
 
 data Resource =
@@ -34,6 +38,13 @@ data Resource =
     githubPath :: String,
     githubRef :: String
   } deriving (Eq)
+
+class IsResource r args | r -> args where
+  toResource :: r -> args -> Resource
+
+instance IsResource Repository.Repository (String, Maybe String) where
+  toResource (Repository.GitHub owner repo) (path, rev) =
+    GitHub owner repo path (maybe "main" id rev)
 
 asFileName :: Resource -> String
 asFileName res = "hakyll-" <> name
@@ -149,3 +160,14 @@ runExternalResourceCache ::
   Sem r v
 runExternalResourceCache = interpretH interpreterExternalResourceCache
 
+fromRepository ::
+  Member ExternalResourceCache r =>
+  Repository.Repository ->
+  String ->
+  Maybe String ->
+  TextScope ->
+  Sem r (Maybe Text) 
+fromRepository repo path rev scope = useTextResource res action
+  where
+    res = toResource repo (path, rev)
+    action = getTextSlice scope

@@ -1,15 +1,22 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
 module Hakyll.Polysemy (
-  module Hakyll.Polysemy
+    module Hakyll.Polysemy
+  , module Hakyll.Polysemy.Metadata
 ) where
 
 import Control.Monad.Fail (fail)
+import Data.Aeson ((.:), FromJSON(..))
+import Data.Aeson.Types (parseEither)
 import GHC.Exception.Type (SomeException(..))
 import qualified Hakyll
 import Polysemy (embed, Embed, interpret, makeSem, Member, Members, runM, Sem)
 import Polysemy.Error (Error, runError, throw)
+import qualified Polysemy.Error as PE
 import RIO
+
+import Hakyll.Polysemy.ExternalResourceCache (ExternalResourceCache, runExternalResourceCache)
+import Hakyll.Polysemy.Metadata
 
 data ModuleError =
   ModuleError {
@@ -25,31 +32,27 @@ instance Show ModuleError where
 
 instance Exception ModuleError
 
-data MonadMetadata m v where
-  GetMetadata :: Hakyll.Identifier -> MonadMetadata m Hakyll.Metadata
+type HakyllError = Error SomeException
 
-$(makeSem ''MonadMetadata)
+asError :: String -> String -> SomeException
+asError fn = SomeException . ModuleError fn
 
-throwError :: Member (Error SomeException) r => String -> String -> Sem r a
-throwError fn = throw . SomeException . ModuleError fn
+throwError :: Member HakyllError r => String -> String -> Sem r a
+throwError fn = throw . asError fn
 
-runMetadata :: 
-  forall m r a .
-  ( Hakyll.MonadMetadata m
-  , Member (Embed m) r
-  ) =>
-  Sem (MonadMetadata ': r) a -> Sem r a
-runMetadata = interpret $ \case
-  GetMetadata identifier -> embed (Hakyll.getMetadata identifier :: m Hakyll.Metadata)
-
-type CompilerSem a = Sem '[MonadMetadata, Error SomeException, Embed Hakyll.Compiler] a
+type CompilerSem a = Sem '[
+    MonadMetadata
+  , ExternalResourceCache
+  , Error SomeException
+  , Embed Hakyll.Compiler
+  ] a
 
 runCompiler ::
   forall a .
   CompilerSem a ->
   Hakyll.Compiler a
 runCompiler a = do
-  r <- runM . runError . runMetadata @Hakyll.Compiler $ a
+  r <- runM . runError . runExternalResourceCache . runMetadata @Hakyll.Compiler $ a
   either (fail . show) pure r
 
 getMetadataValue ::
@@ -63,4 +66,16 @@ getMetadataValue identifier key = do
     (throwError "getMetadataValue" $ "Key not found: " ++ key)
     pure
     $ Hakyll.lookupString key metadata
+
+getMetadataObjectValue ::
+  ( Members '[MonadMetadata, Error SomeException] r
+  , FromJSON value ) =>
+  Hakyll.Identifier ->
+  String ->
+  Sem r value
+getMetadataObjectValue identifier key = do
+  metadata <- getMetadata identifier
+  PE.fromEither $
+    mapLeft (asError "getMetadataObjectValue" . show) $
+    parseEither ((.: "repository") >=> parseJSON) metadata
 

@@ -1,5 +1,7 @@
 ---
-entry: Initial Setup
+type: entry
+name: Initial Setup
+project: projects/telescope-histon/index.md
 commit: 644bbada6de088751ffe62ee436d04b86e1b7b71
 ---
 

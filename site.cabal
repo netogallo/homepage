@@ -9,7 +9,11 @@ executable site
                   , Hakyll.Netogallo.Directory
                   , Hakyll.Polysemy
                   , Hakyll.Polysemy.ExternalResourceCache
+                  , Hakyll.Polysemy.Metadata
+                  , Hakyll.Repository
+                  , Hakyll.Zero
   build-depends:    base == 4.*
+                  , aeson == 2.2.*
                   , extra == 1.7.*
                   , hakyll == 4.16.*
                   , hashable == 1.4.7.*
@@ -17,6 +21,7 @@ executable site
                   , http-client == 0.7.*
                   , http-conduit == 2.3.*
                   , http-download == 0.2.* 
+                  , lens == 5.3.*
                   , path == 0.9.*
                   , polysemy == 1.9.*
                   , rio == 0.1.22.*

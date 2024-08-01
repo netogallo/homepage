@@ -11,6 +11,7 @@ nixpkgs.haskellPackages.developPackage {
         http-client
         http-download
         haskell-language-server
+        lens
         polysemy
         rio
       ]);
