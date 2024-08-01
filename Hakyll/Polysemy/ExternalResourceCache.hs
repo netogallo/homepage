@@ -110,11 +110,12 @@ scopeText ::
   TextScope ->
   Text ->
   Maybe Text
-scopeText (WithinLines start end) text
+scopeText (WithinLines start' end) text
   | List.null begin = Nothing
   | otherwise = Just . Text.unlines . take (end - start) $ begin
   where
     begin = drop start $ Text.lines text
+    start = start' - 1
 
 createResource ::
   Resource ->

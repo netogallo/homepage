@@ -117,16 +117,19 @@ entryCtx = codeIncludeField <> repoUrlCtx <> defaultContext
 codeIncludeField :: Context String
 codeIncludeField = functionField "code-include" compiler
   where 
+    wrapCode lexer code = "```" <> lexer <> "\n" <> code <> "\n```"
     readInt = note (asError "codeIncludeField" "Range must be an integer") . readMaybe
     compiler args item =
       case args of
-        [path, start, end] -> do
+        [path, lexer, start, end] -> do
           repo <- projectRepository <$> projectMetadata item
           entryMeta <- entryMetadata item
           iStart <- readInt start
           iEnd <- readInt end
           result <- fromRepository repo path (Just $ entryCommit entryMeta) (WithinLines iStart iEnd)
-          note (asError "codeIncludeField" "Resource not found") (Text.unpack <$> result)
+          note
+            (asError "codeIncludeField" "Resource not found")
+            (Text.unpack . wrapCode (Text.pack lexer) <$> result)
         args -> throwError "codeIncludeField" $ "Invalid arguments: " ++ show args
 
 pandocCompilerForCodeInsertion :: Item String -> Compiler (Item String)
