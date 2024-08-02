@@ -1,10 +1,9 @@
 ---
 type: entry
-name: Initial Setup
+name: 01-project-setup.html
 project: projects/telescope-histon/index.md
 commit: 21237b29b94047b3fc44aac981a74af06ff26db6
 ---
-
 This first post gives some background and describes how the repository was initially set up. In Neovim, telescope
 plugins are essentially a lua module which relies on the lua telescope module. So as long as the module can be
 found by Neovim, it can be invoked in whatever way the user likes, such as a specific key binding.

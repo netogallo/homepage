@@ -105,14 +105,17 @@ entryMetadata item = do
     Right entry -> pure entry
     Left error -> throwError "entryMetadata" error
 
+pageTitleCtx :: Context String
+pageTitleCtx = field "page-title" $ pure . toFilePath . itemIdentifier
+
 repoUrlCtx :: Context String
 repoUrlCtx = field "repository-url" $ (repoUrl . projectRepository <$>) . projectMetadata
 
 projectCtx :: Context String
-projectCtx = codeIncludeField <> repoUrlCtx <> defaultContext
+projectCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
 
 entryCtx :: Context String
-entryCtx = codeIncludeField <> repoUrlCtx <> defaultContext
+entryCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
 
 codeIncludeField :: Context String
 codeIncludeField = functionField "code-include" compiler

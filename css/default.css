@@ -28,6 +28,10 @@ html {
   font-weight: bold;
 }
 
+.main-body h1 {
+  color: #FD00FE;
+}
+
 .main-body h2 {
   color: #FD00FE;
 }
@@ -55,6 +59,7 @@ html {
 
 body {
   background-image: url("/images/bliss.png");
+  overflow: hidden;
 }
 
 .editor {
