@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -6,27 +5,70 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Netogallo's Development Journal - $title$</title>
         <link rel="stylesheet" href="/css/default.css" />
+        <script type="text/javascript">
+          function toggleMenu() {
+            pr = document.getElementsByClassName("pane-right")[0];
+            pl = document.getElementsByClassName("pane-left")[0];
+
+            if (pr.classList.contains("menu-open")) {
+              pr.classList.remove("menu-open");
+              pl.classList.remove("menu-open");
+            } else {
+              pr.classList.add("menu-open");
+              pl.classList.add("menu-open");
+            }
+          }
+        </script>
     </head>
     <body>
-        <header>
-            <div class="logo">
-                <a href="/">Netogallo's Development Journal</a>
+      <div class="editor">
+        <div class="header">
+          <div style="display: table-cell">
+            <a href="#" onClick="toggleMenu()" class="header-menu">
+              <p>&nbsp;</p>
+              <p>&nbsp;</p>
+              <p>&nbsp;</p>
+            </a>
+          </div>
+          <div class="header-title">
+            <a href="/">Netogallo's Development Journal</a>
+          </div>
+        </div>
+        <div class="content">
+          <div class="pane pane-left nav">
+            <div class="pane-content netrw">
+              <div class="netrw-header">
+                <p>"&nbsp;========================================</p>
+                <p>"&nbsp;Netrw Directory Listing</p>
+                <p>"&nbsp;&nbsp;&nbsp;netowork.me/</p>
+                <p>"&nbsp;========================================</p>
+              </div>
+              <div class="netrw-links">
+                <p><a class="link-file" href="/">home.html</a></p>
+                <p><a class="link-file" href="/about.html">about.html</a></p>
+                <p><a class="link-directory" href="/archive.html">projects/</a></p>
+              </div>
             </div>
-            <nav>
-                <a href="/">Home</a>
-                <a href="/about.html">About</a>
-                <a href="/contact.html">Contact</a>
-                <a href="/archive.html">Archive</a>
-            </nav>
-        </header>
-
-        <main role="main">
-            $body$
-        </main>
-
-        <footer>
-            Site proudly built with
-            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-        </footer>
+            <div class="pane-info">
+              <div class="pane-info-title">
+                [No Name][RO]
+              </div>
+            </div>
+          </div>
+          <div class="pane pane-right main">
+            <div class="pane-content main-body">
+              $body$
+            </div>
+            <div class="pane-info">
+              <div class="pane-info-title">
+                $title$
+              </div>
+              <div class="pane-info-meta">
+                Built with <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </body>
 </html>

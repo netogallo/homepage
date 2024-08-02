@@ -2,39 +2,104 @@ html {
   font-size: 62.5%;
 }
 
+.pane-right .pane-content {
+  color: #ffffff;
+}
+
+.pane.pane-left.menu-open {
+  display: block;
+  width: 100%;
+}
+
+.pane.pane-right.menu-open {
+  display: none;
+}
+
+.sourceCode {
+  overflow-x: scroll;
+}
+
+.pane-content * {
+  padding: 2px;
+}
+
+.main-body a {
+  color: #4F6BD0;
+  font-weight: bold;
+}
+
+.main-body h2 {
+  color: #FD00FE;
+}
+
+.netrw p {
+  margin: 0px;
+}
+
+.netrw-header {
+  color: #729FFB;
+  padding: 0.5em 0.25em 0em 0.25em;
+}
+
+.netrw-links {
+  padding: 0em 0.25em 0.25em 0.25em;
+}
+
+.link-file {
+  color: #ffffff;
+}
+
+.link-directory {
+  color: #00F1F7;
+}
+
 body {
+  background-image: url("/images/bliss.png");
+}
+
+.editor {
   font-size: 1.6rem;
   color: #000;
+  height: 100vh;
 }
 
-header {
-  border-bottom: 0.2rem solid #000;
-  margin: 0 0 3rem;
+.header {
+  background-color: #31363B;
+  margin: 0rem;
   font-size: 2.4rem;
+  color: #ffffff;
+  text-align: center;
+  padding: 0rem;
+  height: 40px;
+  display: table-row;
 }
 
-nav a {
-  font-size: 1rem;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
-  text-transform: uppercase;
+.header-menu {
+  display: inline-block;
+  line-height: 1px;
+  margin-left: 5px;
+  vertical-align: middle;
 }
 
-footer {
-  margin-top: 3rem;
-  padding: 1.2rem 0;
-  border-top: 0.2rem solid #000;
-  font-size: 1.2rem;
-  color: #555;
+.header-menu p {
+  margin: 5px 0 0 0;
+  background-color: #ffffff;
+  border-radius: 2px;
+  color: transparent;
+  display: inline-block;
+  font-size: 10px;
+  height: 3px;
+  padding: 0px 30px 0px 0px;
 }
 
-h1 {
-  font-size: 2.4rem;
+.header .header-title {
+  display: table-cell;
+  width: 100%;
 }
 
-h2 {
-  font-size: 2rem;
+.header-title a {
+  vertical-align: middle;
+  color: #ffffff;
 }
 
 article .header {
@@ -43,54 +108,139 @@ article .header {
   color: #555;
 }
 
-.logo a {
+code {
+ color: #FFA500;
+}
+
+code .kw,.cf {
+  color: #F2E954;
   font-weight: bold;
-  color: #000;
-  text-decoration: none;
 }
 
-.logo {
-    margin: 1rem auto 1rem;
+code .st {
+  color: #cc0000;
 }
 
-nav a {
-  margin: 0 0.6rem;
+code .op {
+  color: #16954F;
+  font-weight: bold;
 }
 
-@media (min-width: 320px) {
+code .va {
+  color: #40ECC3;
+}
+
+.pane-content {
+  background-color: #000000;
+}
+
+.pane-info {
+  background-color: #ffffff;
+}
+
+.pane-info {
+  height: 25px;
+}
+
+.pane-info div {
+  margin: 2px;
+}
+
+.pane-info-title {
+  float: left;
+}
+
+.pane-info-meta {
+  float: right;
+}
+
+.pane {
+  height: 100%; 
+}
+
+.pane-right .pane-content {
+  overflow-y: scroll;
+}
+
+@media (max-width: 640px) {
+  .content {
+    height: 100%;
+  }
+
+  .editor {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .pane-content {
+    height: calc(100vh - 65px);
+  }
+
+  .pane-left {
+    display: none;
+  }
+
+  .pane-right {
+    width: 100%;
+  }
+
+  .editor {
+    width: 100%;
+  }
+
   body {
+    margin: 0px;
+  }
+}
+
+@media (min-width: 641px) {
+
+  .editor {
     width: 90%;
-    margin: 0;
-    padding: 0 5%;
+    margin: 0 auto;
+    padding: 1em;
+  } 
+
+  .pane-content {
+    height: calc(85vh - 25px);
   }
-  header {
-    text-align: center;
+
+  .content {
+    height: 85vh;
   }
-  nav {
-    text-align: center;
+
+  .pane-left {
+    float: left;
+    width: 35%;
   }
-  footer {
-    text-align: center;
+  
+  .pane-right {
+    float: right;
+    width: 65%;
   }
-  .logo {
-    text-align: center:
+
+  .pane-right .pane-content {
+    border-left: 2px solid #ffffff;
+  }
+   
+  .pane-left .pane-content {
+    overflow-x: clip;
+    overflow-y: scroll;
   }
 }
 
-@media (min-width: 640px) {
-  body {
-    width: 60rem;
-    margin: 0 auto;
-    padding: 0;
+@media (min-width: 800px) {
+  .editor {
+    width: 75%;
   }
-  nav {
-    margin: 0;
-    text-align: left;
+}
+
+@media (min-width: 1280px) {
+  .pane-left {
+    width: 20%;
   }
-  footer {
-    text-align: right;
-  }
-  .logo {
-    text-align: left;
+
+  .pane-right {
+    width: 80%;
   }
 }
