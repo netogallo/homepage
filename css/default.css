@@ -2,6 +2,12 @@ html {
   font-size: 62.5%;
 }
 
+li::before {
+  color: #FFFF5F;
+  content: " - ";
+  font-weight: bold;
+}
+
 .pane-right .pane-content {
   color: #ffffff;
 }
@@ -107,12 +113,6 @@ body {
   color: #ffffff;
 }
 
-article .header {
-  font-size: 1.4rem;
-  font-style: italic;
-  color: #555;
-}
-
 code {
  color: #FFA500;
 }
@@ -165,6 +165,31 @@ code .va {
 
 .pane-right .pane-content {
   overflow-y: scroll;
+}
+
+.github * {
+  display: inline-block;
+  height: 25px;
+  vertical-align: middle;
+  line-height: 25px;
+  margin-right: 5px;
+}
+
+.github-repo-url {
+  text-decoration: underline;
+}
+
+.project-header-title {
+  text-decoration: none;
+}
+
+.project-header-title h1 {
+  margin: 0px;
+}
+
+.project-preview {
+  height: 15em;
+  overflow: hidden;
 }
 
 @media (max-width: 640px) {

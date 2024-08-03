@@ -12,8 +12,10 @@ import qualified Data.Text as Text
 import Hakyll (Context, defaultContext, Item, fromFilePath, itemIdentifier, toFilePath)
 import qualified Hakyll
 import qualified Hakyll.Core.Store as Store
-import Hakyll.Core.Compiler (Compiler)
-import Hakyll.Web.Pandoc (defaultHakyllReaderOptions, defaultHakyllWriterOptions, readPandocWith, writePandocWith)
+import Hakyll.Core.Compiler (Compiler, unsafeCompiler)
+import Hakyll.Core.Compiler.Internal (compilerAsk, compilerProvider)
+import Hakyll.Core.Provider (resourceBody)
+import Hakyll.Web.Pandoc (defaultHakyllReaderOptions, defaultHakyllWriterOptions, readPandocWith, renderPandocWithTransform, writePandocWith)
 import Network.HTTP.Simple (parseRequest)
 import Network.HTTP.Download (download)
 import Path.Posix ((</>), Abs, Dir, File, parent, parseAbsDir, Path, Rel, dirname)
@@ -24,6 +26,7 @@ import Polysemy (Embed, Member, Members, Sem)
 import Polysemy.Error (Error, note, throw)
 import RIO
 import qualified System.FilePath as Path
+import Text.Pandoc (Pandoc(..))
 
 import Hakyll.Netogallo.Directory (createDirectoryIfMissing, parseAbsDir, parseRelDir, parseRelFile)
 import Hakyll.Polysemy (asError, CompilerSem, HakyllError, IsMetadata(..), metadata, MonadMetadata, getMetadataValue, runCompiler, throwError)
@@ -116,6 +119,9 @@ projectCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
 
 entryCtx :: Context String
 entryCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
+
+projectSummaryCtx :: Context String 
+projectSummaryCtx = projectCtx
 
 codeIncludeField :: Context String
 codeIncludeField = functionField "code-include" compiler

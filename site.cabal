@@ -22,6 +22,7 @@ executable site
                   , http-conduit == 2.3.*
                   , http-download == 0.2.* 
                   , lens == 5.3.*
+                  , pandoc == 3.2.*
                   , path == 0.9.*
                   , polysemy == 1.9.*
                   , rio == 0.1.22.*
