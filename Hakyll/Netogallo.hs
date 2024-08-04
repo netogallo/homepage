@@ -123,6 +123,9 @@ entryCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
 projectSummaryCtx :: Context String 
 projectSummaryCtx = projectCtx
 
+entrySummaryCtx :: Context String
+entrySummaryCtx = entryCtx
+
 codeIncludeField :: Context String
 codeIncludeField = functionField "code-include" compiler
   where 

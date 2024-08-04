@@ -187,9 +187,34 @@ code .va {
   margin: 0px;
 }
 
-.project-preview {
+.preview {
   height: 15em;
-  overflow: hidden;
+  overflow: hidden; 
+  position: relative;
+}
+
+.preview-header {
+  height: 3em;
+}
+
+.preview-header h3 {
+  margin: 0px;
+  padding: 0px;
+}
+
+.preview-body {
+  height: 12em;
+}
+
+.preview-blurr {
+  height: 12em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgb(0,0,0);
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 80%); 
+  width: 100%;
+  z-index: 1;
 }
 
 @media (max-width: 640px) {

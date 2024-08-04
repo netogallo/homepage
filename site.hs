@@ -6,6 +6,7 @@ import Data.Monoid (mappend)
 import qualified Data.Text as Text
 import Hakyll
 import RIO
+import System.FilePath ((</>), takeDirectory)
 
 import Hakyll.Netogallo
 --------------------------------------------------------------------------------
@@ -21,12 +22,19 @@ main = hakyll $ do
 
     match "projects/*/index.md" $ do
       route $ setExtension "html"
-      compile $
+      compile $ do
+        let 
+          projectEntries = Hakyll.listFieldWith "previews" entrySummaryCtx $ \item -> do
+            let 
+              projectDir = takeDirectory . toFilePath $ itemIdentifier item
+              entriesGlob = fromString $ projectDir </> "entries/*.md"
+            loadAllSnapshots entriesGlob "preview"
+          ctx = projectEntries <> projectCtx
         pandocCompiler
-        >>= loadAndApplyTemplate "templates/project.html" projectCtx
-        >>= saveSnapshot "preview"
-        >>= loadAndApplyTemplate "templates/default.html" projectCtx
-        >>= relativizeUrls
+          >>= saveSnapshot "preview"
+          >>= loadAndApplyTemplate "templates/project.html" ctx 
+          >>= loadAndApplyTemplate "templates/default.html" ctx 
+          >>= relativizeUrls
 
     match "projects/*/entries/*.md" $ do
       route $ setExtension "html"
@@ -34,6 +42,7 @@ main = hakyll $ do
         getResourceBody
           >>= applyAsTemplate codeIncludeField
           >>= pandocCompilerForCodeInsertion
+          >>= saveSnapshot "preview"
           >>= loadAndApplyTemplate "templates/entry.html" entryCtx
           >>= loadAndApplyTemplate "templates/default.html" entryCtx
           >>= relativizeUrls
@@ -44,7 +53,7 @@ main = hakyll $ do
           projects <- loadAllSnapshots "projects/*/index.md" "preview"
           let
             projectsCtx =
-                listField "projects" projectSummaryCtx (return projects)
+                listField "previews" projectSummaryCtx (return projects)
                 <> Hakyll.field "page-title" (const $ pure "projects.html")
                 <> defaultContext
           makeItem "" 
