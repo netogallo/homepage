@@ -126,6 +126,9 @@ projectSummaryCtx = projectCtx
 entrySummaryCtx :: Context String
 entrySummaryCtx = entryCtx
 
+homeCtx :: Context String
+homeCtx = pageTitleCtx <> defaultContext
+
 codeIncludeField :: Context String
 codeIncludeField = functionField "code-include" compiler
   where 

@@ -2,7 +2,7 @@ html {
   font-size: 62.5%;
 }
 
-li::before {
+li::marker {
   color: #FFFF5F;
   content: " - ";
   font-weight: bold;
@@ -25,8 +25,8 @@ li::before {
   overflow-x: scroll;
 }
 
-.pane-content * {
-  padding: 2px;
+.pane-content {
+  padding: 1em;
 }
 
 .main-body a {
@@ -34,12 +34,10 @@ li::before {
   font-weight: bold;
 }
 
-.main-body h1 {
+h1, h2, h3, h4, h5, h6 {
   color: #FD00FE;
-}
-
-.main-body h2 {
-  color: #FD00FE;
+  margin: 0px;
+  padding: 0px;
 }
 
 .netrw p {
@@ -183,10 +181,6 @@ code .va {
   text-decoration: none;
 }
 
-.project-header-title h1 {
-  margin: 0px;
-}
-
 .preview {
   height: 15em;
   overflow: hidden; 
@@ -194,12 +188,7 @@ code .va {
 }
 
 .preview-header {
-  height: 3em;
-}
-
-.preview-header h3 {
-  margin: 0px;
-  padding: 0px;
+  height: 2em;
 }
 
 .preview-body {

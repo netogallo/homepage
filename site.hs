@@ -61,20 +61,18 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" projectsCtx
             >>= relativizeUrls
 
-    {-
-    match "index.html" $ do
-        route idRoute
+    match "index.md" $ do
+        route $ setExtension "html"
         compile $ do
-            projects <- loadAll "projects/*/index.md"
-            let indexCtx =
-                    listField "projects" defaultContext (return projects) `mappend`
-                    defaultContext
-
-            getResourceBody
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
-                >>= relativizeUrls
-    -}
+            projects <- loadAllSnapshots "projects/*/index.md" "preview"
+            let
+              indexCtx =
+                listField "previews" projectSummaryCtx (return projects) 
+                <> homeCtx
+            pandocCompiler
+              >>= loadAndApplyTemplate "templates/index.html" indexCtx
+              >>= loadAndApplyTemplate "templates/default.html" indexCtx
+              >>= relativizeUrls
     match "templates/*" $ compile templateBodyCompiler
 
 
