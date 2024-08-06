@@ -11,7 +11,7 @@ site strives to be informative and hopeuflly it might help you in your own proje
 
 ## My Programming Jazz
 
-As any software developer, I have my own "unbiased" and "objective" opinions on
+Like any software developer, I have my own "unbiased" and "objective" opinions on
 how to develop software. This encompases the tools I use, languages and frameworks
 I prefer and my overall workflow. You might probably have a different view on many
 of these topics, but ultimately, Computer Science is grand and broad field where

@@ -73,6 +73,16 @@ main = hakyll $ do
               >>= loadAndApplyTemplate "templates/index.html" indexCtx
               >>= loadAndApplyTemplate "templates/default.html" indexCtx
               >>= relativizeUrls
+
+    match "about.md" $ do
+      route $ setExtension "html"
+      compile $ do
+        let ctx = aboutCtx
+        pandocCompiler
+          >>= loadAndApplyTemplate "templates/about.html" ctx
+          >>= loadAndApplyTemplate "templates/default.html" ctx
+          >>= relativizeUrls
+
     match "templates/*" $ compile templateBodyCompiler
 
 

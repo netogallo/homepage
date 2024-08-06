@@ -188,7 +188,29 @@ code .va {
 }
 
 .preview-header {
-  height: 2em;
+  height: 3em;
+}
+
+.preview-title a {
+  color: #FD00FE;
+}
+
+.preview-resource-url {
+  font-size: 0.75em;
+}
+
+.preview-resource-url * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.preview-resource-url p {
+  margin: 5px;
+  text-decoration: underline;
+}
+
+.preview-resource-url img {
+  height: 20px;
 }
 
 .preview-body {

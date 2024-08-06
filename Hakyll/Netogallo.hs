@@ -19,8 +19,6 @@ import Hakyll.Web.Pandoc (defaultHakyllReaderOptions, defaultHakyllWriterOptions
 import Network.HTTP.Simple (parseRequest)
 import Network.HTTP.Download (download)
 import Path.Posix ((</>), Abs, Dir, File, parent, parseAbsDir, Path, Rel, dirname)
--- import Polysemy (embed, runM)
--- import Polysemy.Resource (bracket, runResource)
 import Prelude (IO)
 import Polysemy (Embed, Member, Members, Sem)
 import Polysemy.Error (Error, note, throw)
@@ -121,13 +119,30 @@ entryCtx :: Context String
 entryCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
 
 projectSummaryCtx :: Context String 
-projectSummaryCtx = projectCtx
+projectSummaryCtx = previewResourceUrl <> projectCtx
+  where
+    previewResourceUrl :: Context String
+    previewResourceUrl =
+      field "preview-resource-url"
+      $ (repoUrl . projectRepository <$>) . projectMetadata
 
 entrySummaryCtx :: Context String
-entrySummaryCtx = entryCtx
+entrySummaryCtx = previewResourceUrl <> entryCtx
+  where
+    previewResourceUrl :: Context String
+    previewResourceUrl = field "preview-resource-url" $ \item -> do
+      entryMeta <- entryMetadata item
+      projectMeta <- projectMetadata item
+      let
+        baseUrl = repoUrl $ projectRepository projectMeta
+        commit = entryCommit entryMeta
+      pure $ baseUrl <> "/tree/" <> commit
 
 homeCtx :: Context String
 homeCtx = pageTitleCtx <> defaultContext
+
+aboutCtx :: Context String
+aboutCtx = pageTitleCtx <> defaultContext
 
 codeIncludeField :: Context String
 codeIncludeField = functionField "code-include" compiler
