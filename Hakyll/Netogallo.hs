@@ -106,6 +106,19 @@ entryMetadata item = do
     Right entry -> pure entry
     Left error -> throwError "entryMetadata" error
 
+getCommitUrl :: 
+  ( IsMetadata m
+  , Members '[HakyllError, MonadMetadata] r ) =>
+  m ->
+  Sem r String
+getCommitUrl item = do
+  entryMeta <- entryMetadata item
+  projectMeta <- projectMetadata item
+  let
+    baseUrl = repoUrl $ projectRepository projectMeta
+    commit = entryCommit entryMeta
+  pure $ baseUrl <> "/tree/" <> commit
+
 pageTitleCtx :: Context String
 pageTitleCtx = field "page-title" $ pure . toFilePath . itemIdentifier
 
@@ -116,7 +129,12 @@ projectCtx :: Context String
 projectCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
 
 entryCtx :: Context String
-entryCtx = pageTitleCtx <> codeIncludeField <> repoUrlCtx <> defaultContext
+entryCtx =
+  pageTitleCtx
+  <> field "commit-url" getCommitUrl
+  <> codeIncludeField
+  <> repoUrlCtx
+  <> defaultContext
 
 projectSummaryCtx :: Context String 
 projectSummaryCtx = previewResourceUrl <> projectCtx
@@ -130,13 +148,7 @@ entrySummaryCtx :: Context String
 entrySummaryCtx = previewResourceUrl <> entryCtx
   where
     previewResourceUrl :: Context String
-    previewResourceUrl = field "preview-resource-url" $ \item -> do
-      entryMeta <- entryMetadata item
-      projectMeta <- projectMetadata item
-      let
-        baseUrl = repoUrl $ projectRepository projectMeta
-        commit = entryCommit entryMeta
-      pure $ baseUrl <> "/tree/" <> commit
+    previewResourceUrl = field "preview-resource-url" getCommitUrl
 
 homeCtx :: Context String
 homeCtx = pageTitleCtx <> defaultContext

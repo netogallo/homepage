@@ -98,7 +98,7 @@ Free Monads, etc. Most recentlly, most recently my favorite approach is
 [Polysemy](https://github.com/polysemy-research/polysemy). Ultimately, all approaches
 follow the same general principles which is:
 
- 1. Describe the properties of the context with a Monad
+ 1. Use monads as to represent different contexts.
  2. Provide a mechanism to combine these contexts to construct more complex contexts
  3. Leverage on typelevel programming to describe what a function requires from the
     context withouth explicitly prescribing how it should be constructed.

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -5,70 +6,73 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>netogallo's programming journal - $title$</title>
         <link rel="stylesheet" href="/css/default.css" />
+        <link rel="icon" type="image/x-icon" href="/images/netowork-icon.png">
         <script type="text/javascript">
           function toggleMenu() {
-            pr = document.getElementsByClassName("pane-right")[0];
-            pl = document.getElementsByClassName("pane-left")[0];
+            let panes = document.getElementsByClassName("editor");
 
-            if (pr.classList.contains("menu-open")) {
-              pr.classList.remove("menu-open");
-              pl.classList.remove("menu-open");
-            } else {
-              pr.classList.add("menu-open");
-              pl.classList.add("menu-open");
+            for(let i = 0; i < panes.length; i++) {
+              let p = panes[i];
+              if (p.classList.contains("menu-open")) {
+                p.classList.remove("menu-open");
+              } else {
+                p.classList.add("menu-open");
+              }
             }
           }
         </script>
     </head>
     <body>
       <div class="editor">
+
         <div class="header">
-          <div style="display: table-cell">
-            <a href="#" onClick="toggleMenu()" class="header-menu">
+          <div class="header-space">
+            &nbsp;
+          </div>
+          <div class="header-menu">
+            <a href="#" onClick="toggleMenu()" class="header-menu-button">
               <p>&nbsp;</p>
               <p>&nbsp;</p>
               <p>&nbsp;</p>
             </a>
           </div>
           <div class="header-title">
-            <a href="/">netogallo's programming journal</a>
+            <p><a href="/">netogallo's programming journal</a></p>
+          </div>
+          <div class="header-space">
+            &nbsp;
           </div>
         </div>
-        <div class="content">
-          <div class="pane pane-left nav">
-            <div class="pane-content netrw">
-              <div class="netrw-header">
-                <p>"&nbsp;========================================</p>
-                <p>"&nbsp;Netrw Directory Listing</p>
-                <p>"&nbsp;&nbsp;&nbsp;netowork.me/</p>
-                <p>"&nbsp;========================================</p>
-              </div>
-              <div class="netrw-links">
-                <p><a class="link-file" href="/">home.html</a></p>
-                <p><a class="link-file" href="/about.html">about.html</a></p>
-                <p><a class="link-directory" href="/projects.html">projects/</a></p>
-              </div>
-            </div>
-            <div class="pane-info">
-              <div class="pane-info-title">
-                [No Name][RO]
-              </div>
-            </div>
+        
+        <div class="nav pane-nav editor-pane">
+          <div class="netrw-header">
+            <p>"&nbsp;========================================</p>
+            <p>"&nbsp;Netrw Directory Listing</p>
+            <p>"&nbsp;&nbsp;&nbsp;netowork.me/</p>
+            <p>"&nbsp;========================================</p>
           </div>
-          <div class="pane pane-right main">
-            <div class="pane-content main-body">
-              $body$
-            </div>
-            <div class="pane-info">
-              <div class="pane-info-title">
-                $page-title$
-              </div>
-              <div class="pane-info-meta">
-                Built with <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-              </div>
-            </div>
+          <div class="netrw-links">
+            <p><a class="link-file" href="/">home.html</a></p>
+            <p><a class="link-file" href="/about.html">about.html</a></p>
+            <p><a class="link-directory" href="/projects.html">projects/</a></p>
           </div>
         </div>
-      </div>
+
+        <div class="main editor-pane">
+          $body$
+        </div>
+
+        <div class="editor-footer nav-info editor-pane">
+          <p>[No Name][RO]</p>
+        </div>
+        
+        <div class="editor-footer main-info editor-pane">
+          <div class="main-info-title">
+            <p>$page-title$</p>
+          </div>
+          <div class="main-info-meta">
+            <p>Built with <a href="http://jaspervdj.be/hakyll">Hakyll</a></p>
+          </div>
+        </div>
     </body>
 </html>

@@ -19,6 +19,7 @@ make life easir in this regard. The use cases being targeted are:
  - Interacting with the debuggers
 
 This plugiin aims to assist with this tasks in the following ways:
+
  - Provide a Telescope menu listing the available operations
  - Assign a hotkey to these operations when the menu is open and
    clearly show the hotkey in the menu.

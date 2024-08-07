@@ -66,7 +66,7 @@ getTemporaryDirectory ::
   forall m r .
   (MonadIO m, Members '[Embed m, PE.Error SomeException] r) =>
   Sem r (Path Abs Dir)
-getTemporaryDirectory = embed (RD.getTemporaryDirectory :: m FilePath) >>= parseAbsDir
+getTemporaryDirectory = embed @m RD.getTemporaryDirectory >>= parseAbsDir
 
 withTmpFolder ::
   forall m r a .

@@ -9,6 +9,7 @@ import RIO
 import System.FilePath ((</>), takeDirectory)
 
 import Hakyll.Netogallo
+import Hakyll.Sass (sassCompiler)
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
@@ -16,9 +17,11 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
+    match "css/*.sass" $ do
+        route $ setExtension "css"
+        compile $
+          getResourceBody
+          >>= sassCompiler
 
     match "projects/*/index.md" $ do
       route $ setExtension "html"

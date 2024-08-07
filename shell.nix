@@ -7,6 +7,7 @@ nixpkgs.haskellPackages.developPackage {
     nixpkgs.haskell.lib.addBuildTools drv (with nixpkgs.haskellPackages;
       [ cabal-install
         aeson
+        nixpkgs.dart-sass
         extra
         ghcid
         hakyll

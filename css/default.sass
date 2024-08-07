@@ -1,0 +1,337 @@
+html
+  font-size: 62.5%
+
+body
+  background-image: url("/images/bliss.png")
+  overflow: hidden
+  margin: 0px
+
+$editor-padding: 0.3em
+
+$editor-header-height: 3em
+.editor
+  font-size: 1.6rem
+  color: #000
+  display: grid
+  grid-gap: 0px
+
+  & > div
+    background-color: #000000
+    color: #ffffff
+    padding: 0px $editor-padding 0px $editor-padding
+
+  .header
+    display: grid
+    grid-template-columns: 3em auto
+    grid-template-rows: auto 1.5em auto
+    background-color: #31363B
+    margin: 0rem
+    font-size: 1.25em
+    color: #ffffff
+    text-align: center
+    padding: 0rem
+
+    .header-space
+      grid-column-start: 1
+      grid-column-end: 3
+      font-size: 0px
+
+    .header-title
+      line-height: 1.5em
+      p
+        margin: 0px
+      a 
+        color: #ffffff
+    
+    .header-menu-button
+      display: inline-block
+      line-height: 0.5em
+      text-decoration: none
+
+      p 
+        margin: 0.12em 0 0.13em 0
+        background-color: #ffffff
+        border-radius: 0.12em
+        color: transparent
+        display: inline-block
+        height: 0.2em
+        padding: 0px 0px 0px 2em
+
+  .main
+    overflow-y: scroll
+
+  .editor-footer
+    color: #000000
+    background-color: #ffffff
+
+    p
+      line-height: 0px
+
+  .main-info
+    display: grid
+    grid-template-columns: auto 9em
+
+    .main-info-meta
+      text-align: right
+
+    .main-info-title
+      overflow-x: hidden
+      white-space: nowrap
+      
+      & > p
+        width: 100vw
+
+.nav
+  line-height: 0.5em
+
+ul
+  li::marker 
+    color: #FFFF5F
+    content: " - "
+    font-weight: bold
+
+ol
+  li::marker
+    color: #FFFF5F
+  font-weight: bold
+
+.pane-right
+  .pane-content
+    color: #ffffff
+
+.sourceCode 
+  overflow-x: scroll
+
+$pane-content-padding: 1em
+.pane-content
+  padding: $pane-content-padding
+
+$main-link-color: #4F6BD0
+a
+  color: #4F6BD0
+  font-weight: bold
+
+$main-header-color: #FD00FE
+h1, h2, h3, h4, h5, h6 
+  color: $main-header-color
+  margin: 0px
+  padding: 0px
+
+.netrw
+  p
+    margin: 0px
+
+.netrw-header 
+  color: #729FFB
+  padding: 0.5em 0.25em 0em 0.25em
+
+.netrw-links 
+  padding: 0em 0.25em 0.25em 0.25em
+
+.link-file 
+  color: #ffffff
+
+.link-directory 
+  color: #00F1F7
+
+code 
+  color: #FFA500
+
+code
+  .kw,.cf
+    color: #F2E954
+    font-weight: bold
+
+  .st
+    color: #cc0000
+
+  op
+    color: #16954F
+    font-weight: bold
+
+  .va
+    color: #40ECC3
+
+.pane-info
+  background-color: #ffffff
+  height: 25px
+
+  div
+    margin: 2px
+
+.pane-info-title 
+  float: left
+
+.pane-info-meta
+  float: right
+
+.pane
+  height: 100%
+
+.pane-right
+  .pane-content
+    overflow-y: scroll
+
+.github
+  *
+    display: inline-block
+    height: 25px
+    vertical-align: middle
+    line-height: 25px
+    margin-right: 5px
+
+  .github-repo-url
+    text-decoration: underline
+    width: calc(100% - 35px)
+    overflow-x: hidden
+    white-space: nowrap
+
+.project-header-title
+  text-decoration: none
+
+.preview
+  height: 15em
+  overflow: hidden 
+  position: relative
+  background-color: #555555
+  border-radius: 15px
+  padding: 5px
+
+.preview-header
+  height: 4em
+
+.preview-title
+  a
+    color: #FD00FE
+
+.preview-resource-url
+  font-size: 0.75em
+  overflow-x: hidden
+
+.preview-resource-url
+  *
+    display: inline-block
+    vertical-align: middle
+
+  p
+    margin: 5px
+    text-decoration: underline
+    width: calc(100% - 30px)
+
+  img
+    height: 20px
+
+.preview-body 
+  height: 12em
+
+.preview-blurr 
+  height: 12em
+  position: absolute
+  bottom: 0
+  left: 0
+  background: rgb(0,0,0)
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 80%)
+  width: 100%
+  z-index: 1
+
+$editor-footer-height: 2em
+
+@media (max-width: 640px)
+
+  $editor-height: 100vh
+  $editor-width: 100vw
+
+  .editor 
+    height: $editor-height
+    margin: 0px
+    padding: 0px
+    width: $editor-width
+
+    grid-template-columns: auto
+    grid-template-rows: $editor-header-height auto $editor-footer-height
+
+    .header
+      .header-title
+        width: calc($editor-width - 3em)
+
+  .content 
+    height: calc($editor-height - $editor-header-height)
+
+  .pane-content
+    height: calc($editor-height - 200px)
+
+  .nav-info, .nav
+    display: none
+
+  .editor.menu-open
+    .nav-info, .nav
+      display: block
+
+    .main, .main-info
+      display: none
+
+@media (min-width: 641px)
+
+  $editor-height: 90vh
+  $editor-width: 90vw
+  
+  .editor
+    width: 90vw
+    margin: 0 auto
+    padding: 1em
+    height: $editor-height
+    grid-template-columns: 15em auto
+    grid-template-rows: $editor-header-height calc($editor-height - $editor-header-height - $editor-footer-height) $editor-footer-height
+
+    .main
+      border-left: 2px solid #ffffff
+
+    .header
+      grid-column-start: 1
+      grid-column-end: 3
+
+    .content
+      height: calc($editor-height - $editor-header-height)
+
+  .pane-content
+    height: calc(85vh - 25px)
+
+  .pane-left
+    float: left
+    width: 35%
+
+    .pane-content
+      overflow-x: clip
+      overflow-y: scroll
+  
+  .pane-right
+    float: right
+    width: 65%
+
+    .pane-content
+      border-left: 2px solid #ffffff
+
+  .editor.menu-open
+    display: grid
+    grid-template-columns: auto
+
+    .header
+      grid-column-start: 1
+      grid-column-end: 2
+
+    .nav-info, .nav
+      display: block
+
+    .main, .main-info
+      display: none
+
+@media (min-width: 800px)
+  .editor
+    width: 75%
+
+@media (min-width: 1280px)
+  .pane-left
+    width: 20%
+
+  .pane-right
+    width: 80%

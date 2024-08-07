@@ -10,8 +10,9 @@ import Data.Aeson ((.:), FromJSON(..))
 import Data.Aeson.Types (parseEither)
 import GHC.Exception.Type (SomeException(..))
 import qualified Hakyll
-import Polysemy (embed, Embed, interpret, makeSem, Member, Members, runM, Sem)
+import Polysemy (embed, Embed, Final, interpretH, makeSem, Member, Members, runM, Sem)
 import Polysemy.Error (Error, runError, throw)
+import Polysemy.Resource (Resource(..))
 import qualified Polysemy.Error as PE
 import RIO
 

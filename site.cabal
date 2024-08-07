@@ -11,6 +11,7 @@ executable site
                   , Hakyll.Polysemy.ExternalResourceCache
                   , Hakyll.Polysemy.Metadata
                   , Hakyll.Repository
+                  , Hakyll.Sass
                   , Hakyll.Zero
   build-depends:    base == 4.*
                   , aeson == 2.1.*
@@ -25,6 +26,7 @@ executable site
                   , pandoc == 3.1.*
                   , path == 0.9.*
                   , polysemy == 1.9.*
+                  , process == 1.6.*
                   , rio == 0.1.22.*
                   , rio-prettyprint == 0.1.8.*
                   , text == 2.0.*
