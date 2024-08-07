@@ -2,7 +2,7 @@
 type: entry
 name: 01-project-setup.html
 project: projects/telescope-histon/index.md
-commit: 6cae813a29b0393107fb1c95fc4b5cb65e16b57
+commit: 01-initial-project-setup
 ---
 This first post gives some background and describes how the repository was initially set up.
 In Neovim, telescope plugins are essentially a lua module which relies on the lua telescope
@@ -146,16 +146,103 @@ $code-include("lua/histon/init.lua", "lua", "27", "36")$
 ## Wrapping Up
 
 All that remains is to call the `setup` method of the value we created using the `pickers.new`
-function, which happens at the end of the `vimspector_actions` function.
+function, which happens at the end of the `vimspector_actions` function. You now might be
+wondering, how do I run my awesome new plugin? The answer is, anyway you like! You can bind
+it to a key, for example.
 
-
+However, it would be nice to have a convenient way to test this plugin while it is being
+developed. In particular, you probably don't want it interfering with Neovim while
+you are working on it. The next section explains how to use Nix to address this issue.
 
 ## Using Nix to run this plugin
-If you don't want to mess with your Neovim configuration and keep things separate, this project supplies a shell.nix file which can be used with [Nix](https://nixos.org/) to run this plugin. If you are not familiar with Nix, I strongly recommend you to check it out.
 
-To summarize, Nix is a package manager that, unlike traditional package managers, allows one to have multiple versions of the same package and customize each version down to the build flags used by the compiler to build the package. It runs on many Unix-like systems, including Linux and MacOS, so you should be able to integrate it into your development workflow.
+When it comes to testing this plugin, it would be nice to have the following:
 
-Once you have nix installed, you can simply run `nix-shell --run nvim` and it will launch Neovim with telescope and this plugin installed without interfering with your current Neovim configuration.
+ - The ability to test it without interfering with your main Neovim configuration
+ - Automate the plugin's setup so other developers can quickly hack it
 
-Lets look at the shell.nix file to understand how this is achieved:
-$code-include("shell.nix", "nix", "1", "5")$
+The pickle to do this is that not only does one need Neovim, but one also needs Telescope
+and Vimspector installed in Neovim. Thats quite a few things to set up! How can we do this
+in a reproducible way?
+
+I personally rely on [Nix](https://nixos.org/) to achieve this goal. If you have Nix
+installed, you can test this plugin by running `nix-shell --run nvim` in the root of
+this project. Nix will take care of installing all the necessary dependencies (even
+if you don't have Neovim installed) and configure Neovim to use this plugin. To
+open our picker, the key binding is: `<Space>fd`.
+
+The remainder of this post will explain how this is achieved.
+
+### The "shell.nix" File
+
+When `nix-shell` is called, it will search for a file called `shell.nix` in the current
+working directory. This project provides a `shell.nix` file, lets look at it.
+
+In the first lines I pin my shell to a specific version of Nixpkgs. However, I do it
+in an unusual way. Rater than using `fetchTarball`, I instead use `fetchzip`. However,
+in order to use `fetchzip`, you need `nixpkgs` as it is not part of the Nix language.
+The reason I prefer `fetchzip` is that it saves the file in the Nix store, making it
+possible to run the shell without an internet connection. This looks like:
+
+$code-include("shell.nix", "nix", "1", "7")$
+
+Normally, you would use `mkDerivation` or a similar helper to create a package. For a
+production plugin, this is what you would do. However, I want an environment where one
+can easily modify the plugin and see results. For that reason, I am using `runCommand`
+instead. In spite of the name, this function still results in a derivation, the difference
+is that it does not expect sources and other attributes a derivation would normally
+require. The `runCommand` function takes three arguments:
+
+1. The name of the derivation, "nvim-wrapped" in my case.
+2. A set of attributes to configure the derivation. In our case we need to make sure
+   all necessary dependenceis are available: `neovim`, `makeWrapper`,
+   `lua51Packages.telescope-nvim` and `lua51Packages.plenary-nvim`.
+3. A script to be executed to produce the derivation.
+
+In this project, this looks like:
+
+$code-include("shell.nix", "nix", "19", "29")$
+
+You can see that the result of `runCommand` gets bound to a variable called `nvim-wrapped`
+which will use later to create the shell.
+
+Lets now look at the bash script that constructs the package. This script needs to
+achieve the following:
+
+1. Create a directory for all the necessary lua modules that will then be added to the
+    [rtp or runtime](https://neovim.io/doc/user/options.html#'runtimepath') of Neovim.
+    This will contain our plugin as well as the necessary dependencies.
+2. Create a directory with a `init.lua` file which will contain our plugin's configuration,
+   including the key bindings.
+3. Create a wrapper for neovim which will launch Neovim with the correct configuration.
+
+First we create the directory for lua modules. This is done as follows:
+
+$code-include("shell.nix", "bash", "12", "13")$
+
+Next we create a symlink from this project to the directory we just created:
+
+$code-include("shell.nix", "bash", "14", "14")$
+
+We then symlink the necessary dependencies to the directory we just created:
+
+$code-include("shell.nix", "bash", "15", "16")$
+
+Finally, we create the wrapper. For this we use the `makeWrapper` function which
+is provided by the `makeWrapper` package. This function will create a new executable
+which will be placed in the `bin` directory of this package. This executable will:
+(1) call the `nvim` overriding the location of the `init.lua` file to the one found
+in this project. (2) Set the `XDG_CONFIG_HOME` environmental variable before launching
+nvim. Setting this variable will add our modules to the `rtp` of Neovim. This looks like:
+
+$code-include("shell.nix", "bash", "17", "17")$
+
+We can now put everything together at the end of the `shell.nix`. We use the
+`mkShellNoCC` function to make a shell. We provide the `nvim-wrapped` variable
+we created earlier as part of its packages:
+
+$code-include("shell.nix", "nix", "31", "36")$
+
+The `mkShellNoCC` function will add the `bin` directory of the `nix-wrapped` derivation
+to the shell's `PATH` which allows us to launch the nvim wrapper we just created.
+
